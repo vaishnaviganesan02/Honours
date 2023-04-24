@@ -108,3 +108,6 @@ cluster2 <- c(cluster2,cluster2_samples2$V1,cluster2_samples3$V1)
 
 print(cluster1)
 print(cluster2)
+
+write.table(cluster1 , file = "cluster1.txt" )
+write.table(cluster2, file = "cluster2.txt)
