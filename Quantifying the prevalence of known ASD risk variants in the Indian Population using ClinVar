@@ -1,0 +1,22 @@
+#the following code were executed on Linux command line
+
+#Variants downloaded from clinvar using search term : Autism spectrum disorder
+#variants filtered for clinical significance: Pathogenic (3341 lines)
+
+cat clinvar.txt | grep "Autism spectrum disorder" > clinvar_autism.txt
+#clinvar_autism contains all variants whose condition is explicitly mentiones as autism spectrum disorder (154 lines)
+
+#to obtain positions of variants
+cat clinvar_autism.txt | cut -f 8,9 > clinvar_positions
+#clinvar_positions contain the chromosomes and position values. This includes SNV and indels (154 variants)
+#manually filter for SNV in clinvar_positions
+
+#creating a .bed file called clinvar_bed containing only SNV
+awk '{print $1,$2,$2+1}' clinvar_positions > clinvar_bed
+
+#intersecting clinvar_bed files with GenomeAsia VCF file to find previously reported known ASD variants
+bcftools view -R clinvar.bed \
+-o clinvar_intersect \
+-O z \
+/media/apf/MyEncryptedDisk/Seagate/ASDproject/1000genome/GASIA/GASIA.vcf.gz
+
