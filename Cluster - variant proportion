@@ -1,0 +1,60 @@
+#to extract genomic data for cluster 1
+bcftools view --samples-file cluster1.txt GA_SFARI_with header \
+--force-samples \
+-o cluster_1.vcf.gz \
+-O z
+
+#to extract genomic data for cluster 2
+bcftools view --samples-file cluster2.txt GA_SFARI_with_header \
+--force-samples \
+-o cluster_2.vcf.gz \
+-O z
+
+#Filter gnomAD by minor allele frequency
+plink2 --vcf gnomad.vcf.gz --max-maf 0.05 --out gnomad_maf.vcf --recode
+
+#to get experimental data (high impact variants from SFARI)
+bcftools view -R /media/apf/OneTouch/ASD_project/high_impact_homogen.vcf.gz \
+/media/apf/OneTouch/ASD_project/gnomad_maf.vcf.gz \
+-o /media/apf/OneTouch/ASD_project/GASIA_SFARI_high_gnomad.vcf.gz \
+-O z 
+
+#to get control data (low impact variants from SFARI)
+bcftools view -R /media/apf/OneTouch/ASD_project/low_impact_homogen.vcf.gz \
+/media/apf/OneTouch/ASD_project/gnomad_maf.vcf.gz \
+-o /media/apf/OneTouch/ASD_project/GASIA_SFARI_low_gnomad.vcf.gz \
+-O z 
+
+#to subset information from cluster1.vcf to get high impact variants
+bcftools view -R /media/apf/OneTouch/ASD_project/GASIA_SFARI_high_gnomad.vcf.gz \
+/media/apf/OneTouch/ASD_project/cluster1/cluster1.vcf.gz \
+-o /media/apf/OneTouch/ASD_project/cluster1/cluster1_high.vcf.gz \
+-O z
+
+#to subset information from cluster2.vcf to get high impact variants
+bcftools view -R /media/apf/OneTouch/ASD_project/GASIA_SFARI_high_gnomad.vcf.gz \
+/media/apf/OneTouch/ASD_project/cluster2/cluster2.vcf.gz \
+-o /media/apf/OneTouch/ASD_project/cluster2/cluster2_high.vcf.gz \
+-O z
+
+#to subset information from cluster1.vcf to get low impact variants
+bcftools view -R /media/apf/OneTouch/ASD_project/GASIA_SFARI_low_gnomad.vcf.gz \
+/media/apf/OneTouch/ASD_project/cluster1/cluster1.vcf.gz \
+-o /media/apf/OneTouch/ASD_project/cluster1/cluster1_low.vcf.gz \
+-O z
+
+#to subset information from cluster2.vcf to get low impact variants
+bcftools view -R /media/apf/OneTouch/ASD_project/GASIA_SFARI_low_gnomad.vcf.gz \
+/media/apf/OneTouch/ASD_project/cluster2/cluster2.vcf.gz \
+-o /media/apf/OneTouch/ASD_project/cluster2/cluster2_low.vcf.gz \
+-O z
+
+#To get the number of samples for each genotype (cluster 1 high impact)
+vcftools --gzvcf cluster1_high.vcf.gz --geno-counts --recode --out cluster1_high
+#To get the number of samples for each genotype (cluster 1 low impact)
+vcftools --gzvcf cluster1_low.vcf.gz --geno-counts --recode --out cluster1_low
+#To get the number of samples for each genotype (cluster 2 high impact)
+vcftools --gzvcf cluster2_high.vcf.gz --geno-counts --recode --out cluster2_high
+#To get the number of samples for each genotype (cluster 2 low impact)
+vcftools --gzvcf cluster2_low.vcf.gz --geno-counts --recode --out cluster2_low
+
