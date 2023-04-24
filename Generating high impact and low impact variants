@@ -24,3 +24,6 @@ java -jar SnpSift.jar filter "isHom( GEN[0] ) " /media/apf/MyEncryptedDisk/Seaga
 vcftools --vcf high_impact_homogen.vcf --freq --recode --out high_impact
 #to get .frq file for allele frequency distribution (low impact)
 vcftools --vcf low_impact_homogen.vcf --freq --recode --out low_impact.
+
+#to transpose VCF file to find number of samples with atleast one potential high impact variant in homozygous alternative form
+vcftools --vcf high_impact_homogen.vcf --recode --transpose --out high_ipact_homogen_transposed.vcf
