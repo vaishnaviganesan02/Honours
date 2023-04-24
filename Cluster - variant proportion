@@ -58,3 +58,13 @@ vcftools --gzvcf cluster2_high.vcf.gz --geno-counts --recode --out cluster2_high
 #To get the number of samples for each genotype (cluster 2 low impact)
 vcftools --gzvcf cluster2_low.vcf.gz --geno-counts --recode --out cluster2_low
 
+#To get the number of variants that are present in the heterozygous or homozygous alternative form
+#for cluster1 high impact (516 samples)
+cat cluster1_high.gcount | grep -v '516' | wc -l
+#for cluster2 low impact (516 samples)
+cat cluster1_low.gcount | grep -v '516' | wc -l
+#for cluster2 high imapct (536 samples)
+cat cluster2_high.gcount | grep -v '536' | wc -l
+#cat cluster2_low.gcount | grep -v '536' | wc -l
+
+
