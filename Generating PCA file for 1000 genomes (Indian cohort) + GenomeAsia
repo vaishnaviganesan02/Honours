@@ -1,6 +1,6 @@
 #to get chromosome 1 data from GenomeAsia
 bcftools view --regions 1 GASIA.vcf.gz \
--o GASIA_ch1.vcf.gz\
+-o GASIA_chr1.vcf.gz\
 -O z
 
 #to get selected samples ids to generate "Gujarati in Houston" cohort
@@ -15,10 +15,16 @@ bcftools view --samples-file telugu.txt south_asian.vcf.gz \
 -o telugu_1000genomes.vcf.gz \
 -O z
 
-To merge Gujarati and Telugu into one VCF file
+#To merge Gujarati and Telugu and GenomeAsia into one VCF file
 bcftools merge gujarati_1000genomes.vcf.gz \
 telugu_1000genomes.vcf.gz \
+GASIA_chr1.vcf.gz \
 --force-samples \
--o 1000_genomes_indians.vcf.gz \
+-o GASIA_1000_genomes_indians.vcf.gz \
 -O z
 
+#To generate an .eigenvec file to plot a PCA
+plink2 --vcf GASIA_1000_genomes_indians.vcf.gz \
+--pca \
+--out pca_2 \
+--make-bed
