@@ -21,7 +21,7 @@ bcftools view --samples-file chinese.txt east_asian.vcf.gz \
 -o chinese_1000genomes.vcf.gz \
 -O z
 
-#To merge 5 cohorts from 1000 genomes with GenomeAsia into one VCF file
+#To merge 3 cohorts from 1000 genomes with GenomeAsia into one VCF file
 bcftools merge british_1000genomes.vcf.gz \
 finnish_1000genomes.vcf.gz \
 chinese_1000genomes.vcf.gz \
