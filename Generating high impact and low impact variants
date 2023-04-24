@@ -1,0 +1,26 @@
+#codes below were executed in Linux Command line
+
+#SFARI data was downloaded from the SFARI database
+
+#Intersecting SFARI data with GenomeAsia
+bcftools view -R /media/apf/MyEncryptedDisk/Seagate/ASDproject/SFARI/sfari_withoutprefix.txt \
+-o /media/apf/MyEncryptedDisk/Seagate/ASDproject/SFARI/sfari_intersect \
+/media/apf/MyEncrytpedDisk/Seagate/ASDproject/genome_asia_data/GAsP_1163Samples.SNVs.Feb2020.vcf.gz 
+
+#annotating the VCF file using snpEff
+java -Xmx8G -jar snpEff.jar -v -stats GASIA_clinvar_snpeff.html hg38 ../../clinvar/executables/GASIA_clinvar > ../../clinvar/GASIA_clinvar_ann.vcf
+
+#to filter for high impact variants from the annotated file
+java -jar SnpSift.jar filter "ANN[*].IMPACT has 'HIGH'" ../../SFARI/executables/annotations/GASIA_SFARI_ann.vcf.gz > ../../SFARI/executables/annotations/GASIA_SFARI_ann_HIGH.vcf
+#to filter for low impact variants from the annotated file
+java -jar SnpSift.jar filter "ANN[*].IMPACT has 'LOW'" ../../SFARI/executables/annotations/GASIA_SFARI_ann.vcf.gz > ../../SFARI/executables/annotations/GASIA_SFARI_ann_LOW.vcf
+
+#to extract homozygous genotypes (high impact)
+java -jar SnpSift.jar filter "isHom( GEN[0] ) " /media/apf/MyEncryptedDisk/Seagate/ASDproject/SFARI/executables/annotations/ann_vcf_header/high_impact.vcf.gz > /media/apf/MyEncryptedDisk/Seagate/ASDproject/SFARI/executables/annotations/ann_vcf_header/high_impact_homogen.vcf
+# to extract homozygous genotypes (low impact)
+java -jar SnpSift.jar filter "isHom( GEN[0] ) " /media/apf/MyEncryptedDisk/Seagate/ASDproject/SFARI/executables/annotations/ann_vcf_header/low_impact.vcf.gz > /media/apf/MyEncryptedDisk/Seagate/ASDproject/SFARI/executables/annotations/ann_vcf_header/low_impact_homogen.vcf
+
+#to get .frq file for allele frequency distribution (High impact)
+vcftools --vcf high_impact_homogen.vcf --freq --recode --out high_impact
+#to get .frq file for allele frequency distribution (low impact)
+vcftools --vcf low_impact_homogen.vcf --freq --recode --out low_impact.
