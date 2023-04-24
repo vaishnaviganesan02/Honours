@@ -33,5 +33,5 @@ GASIA_chr1.vcf.gz \
 #To generate an .eigenvec file to plot a PCA
 plink2 --vcf GASIA_1000_genomes.vcf.gz \
 --pca \
---out pca_2 \
+--out pca_3 \
 --make-bed
