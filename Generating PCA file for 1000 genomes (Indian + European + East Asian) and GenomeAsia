@@ -1,0 +1,51 @@
+#to get chromosome 1 data from GenomeAsia
+bcftools view --regions 1 GASIA.vcf.gz \
+-o GASIA_chr1.vcf.gz\
+-O z
+
+#to get selected samples ids to generate "Gujarati in Houston" cohort
+bcftools view --samples-file gujarati.txt south_asian.vcf.gz \
+--force-samples \
+-o gujarati_1000genomes.vcf.gz \
+-O z
+
+#to get selected samples ids to generate "Indian Telugus in UK" cohort
+bcftools view --samples-file telugu.txt south_asian.vcf.gz \
+--force-samples \
+-o telugu_1000genomes.vcf.gz \
+-O z
+
+#to get selected sample ids to generate "British in England and Scotland" cohort
+bcftools view --samples-file british.txt european.vcf.gz \
+--force-samples \
+-o british_1000genomes.vcf.gz \
+-O z
+
+#to get selected sample ids to generate "Finnish in Finland" cohort
+bcftools view --samples-file finnish.txt european.vcf.gz \
+--force-samples \
+-o finnish_1000genomes.vcf.gz \
+-O z
+
+#to get selected sample ids to generate "Han Chinese in Beijing, China" cohort
+bcftools view --samples-file chinese.txt east_asian.vcf.gz \
+--force-samples \
+-o chinese_1000genomes.vcf.gz \
+-O z
+
+#To merge 5 cohorts from 1000 genomes with GenomeAsia into one VCF file
+bcftools merge gujarati_1000genomes.vcf.gz \
+telugu_1000genomes.vcf.gz \
+british_1000genomes.vcf.gz \
+finnish_1000genomes.vcf.gz \
+chinese_1000genomes.vcf.gz \
+GASIA_chr1.vcf.gz \
+--force-samples \
+-o GASIA_1000_genomes.vcf.gz \
+-O z
+
+#To generate an .eigenvec file to plot a PCA
+plink2 --vcf GASIA_1000_genomes.vcf.gz \
+--pca \
+--out pca_2 \
+--make-bed
