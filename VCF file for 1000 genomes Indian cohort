@@ -1,0 +1,24 @@
+#to get chromosome 1 data from GenomeAsia
+bcftools view --regions 1 GASIA.vcf.gz \
+-o GASIA_ch1.vcf.gz\
+-O z
+
+#to get selected samples ids to generate "Gujarati in Houston" cohort
+bcftools view --samples-file gujarati.txt south_asian.vcf.gz \
+--force-samples \
+-o gujarati_1000genomes.vcf.gz \
+-O z
+
+#to get selected samples ids to generate "Indian Telugus in UK" cohort
+bcftools view --samples-file telugu.txt south_asian.vcf.gz \
+--force-samples \
+-o telugu_1000genomes.vcf.gz \
+-O z
+
+To merge Gujarati and Telugu into one VCF file
+bcftools merge gujarati_1000genomes.vcf.gz \
+telugu_1000genomes.vcf.gz \
+--force-samples \
+-o 1000_genomes_indians.vcf.gz \
+-O z
+
